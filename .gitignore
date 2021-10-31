@@ -23,6 +23,7 @@ DerivedData
 
 # Android/IntelliJ
 #
+app/google-services.json
 build/
 gradle.properties
 .idea
