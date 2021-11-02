@@ -1,6 +1,9 @@
+import {useScrollToTop} from '@react-navigation/native';
 import * as React from 'react';
-import {View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 
 export default function TabMainScreen() {
-  return <View />;
+  const scrollViewRef = React.useRef<ScrollView>(null);
+  useScrollToTop(scrollViewRef);
+  return <ScrollView ref={scrollViewRef}></ScrollView>;
 }
