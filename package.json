@@ -16,6 +16,7 @@
     "release:android": "cd android && gradlew bundleRelease"
   },
   "dependencies": {
+    "@actbase/react-daum-postcode": "^1.0.1",
     "@notifee/react-native": "^3.0.2",
     "@react-native-firebase/app": "^12.9.3",
     "@react-native-firebase/messaging": "^12.9.3",
@@ -30,6 +31,9 @@
     "react-native-bootsplash": "^3.2.6",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.9.0",
+    "react-native-vector-icons": "^9.0.0",
+    "react-native-webview": "^11.14.2",
     "react-redux": "^7.2.6",
     "redux": "^4.1.1"
   },
