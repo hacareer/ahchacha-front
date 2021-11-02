@@ -1,3 +1,7 @@
+export interface ILinkingConfiguration {
+  prefixes: string[];
+  config: any;
+}
 export type RootStackParamList = {
   Register: undefined;
   BottomTab: undefined;
