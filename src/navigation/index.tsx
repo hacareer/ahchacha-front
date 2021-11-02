@@ -6,10 +6,11 @@ import RegisterNavigator from './RegisterNavigator';
 
 const Stack = createStackNavigator<RootStackParamList>();
 export default function RootNavigator() {
+  const screenOptions = {headerShown: false};
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
+    <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="Register" component={RegisterNavigator} />
+      <Stack.Screen name="BottomTab" component={BottomTabNavigator} />
     </Stack.Navigator>
   );
 }
