@@ -1,7 +1,15 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import RootNavigator from './src/navigation';
+import RNBootSplash from 'react-native-bootsplash';
+import {Provider as ReduxProvider} from 'react-redux';
+import {createStore} from 'redux';
+import reducers from './src/redux/reducers';
+import LinkingConfiguration from './LinkingConfiguration';
+import {Provider as PaperProvider} from 'react-native-paper';
+
 const App = () => {
   return <RootNavigator />;
 };
@@ -9,19 +17,28 @@ const App = () => {
 const Navigation = () => {
   const [ready, setReady] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? 'black' : 'white',
-  };
+  function handleNavigationReady() {
+    setReady(true);
+    // hide boot splash
+    RNBootSplash.hide();
+  }
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <NavigationContainer onReady={() => setReady(true)}>
-        <StatusBar
-          animated={true}
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        />
-        {ready && App}
-      </NavigationContainer>
-    </SafeAreaView>
+    <ReduxProvider store={createStore(reducers)}>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <StatusBar
+            animated={true}
+            backgroundColor={isDarkMode ? 'black' : 'white'}
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          />
+          <NavigationContainer
+            onReady={handleNavigationReady}
+            linking={LinkingConfiguration}>
+            {ready && <App />}
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </ReduxProvider>
   );
 };
 
