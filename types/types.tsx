@@ -5,6 +5,7 @@ export interface ILinkingConfiguration {
 export type RootStackParamList = {
   Register: undefined;
   BottomTab: undefined;
+  Hospital: undefined;
 };
 export type BottomTabParamList = {
   Main: undefined;
@@ -19,4 +20,9 @@ export type RegisterParamList = {
   Vaccinated: undefined;
   School: undefined;
   HangOuts: undefined;
+};
+export type HospitalParamList = {
+  List: undefined;
+  Detail: undefined;
+  Review: undefined;
 };
