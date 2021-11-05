@@ -7,63 +7,109 @@ import RegisterVaccinatedScreen from '../screens/AppScreens/RegisterScreens/Regi
 import RegisterNicknameScreen from '../screens/AppScreens/RegisterScreens/RegisterNicknameScreen';
 import RegisterTermsScreen from '../screens/AppScreens/RegisterScreens/RegisterTermsScreen';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Animated, View} from 'react-native';
+import {Animated, Dimensions, StyleSheet, View} from 'react-native';
 let cp = 'Main';
 const RegisterProgress = createStackNavigator();
+
 export default function RegisterProgressNavigator({navigation, route}) {
   const [progressValue, setProgressValue] = React.useState(1);
-  const animatingProgressBar = React.useRef(new Animated.Value(0));
+  const animatedProgressBar = React.useRef(new Animated.Value(0)).current;
+  // 나중에 Constant file로 빼기
+  const screenWidth = Dimensions.get('window').width;
+
+  const translateX = animatedProgressBar.interpolate({
+    inputRange: [0, 5],
+    outputRange: [-204, 0],
+    extrapolate: 'clamp',
+  });
   React.useEffect(() => {
-    Animated.timing(animatingProgressBar.current, {
+    Animated.timing(animatedProgressBar, {
       toValue: progressValue,
       // delay: animDelay,
-      duration: 1000,
+      duration: 400,
       useNativeDriver: true,
     }).start();
   }, [progressValue]);
-
-  const ProgressBar = (
-    <Animated.View
-      style={{
-        backgroundColor: 'yellow',
-        width: animatingProgressBar.current,
-        height: 8,
-      }}
-    />
+  const styles = StyleSheet.create({
+    progressBarLeftHider: {
+      width: (screenWidth - 204) / 2,
+      height: 8,
+      backgroundColor: 'white',
+      zIndex: 99,
+    },
+    progressBarWrap: {
+      flexDirection: 'row',
+      paddingTop: 25.8,
+      paddingBottom: 25.8,
+      backgroundColor: 'white',
+    },
+    progressBar: {
+      width: 204,
+      height: 8,
+      backgroundColor: '#B9B9B9',
+    },
+    progressBarBackground: {
+      position: 'absolute',
+      top: 25.8,
+      left: (screenWidth - 204) / 2,
+      width: 204,
+      height: 8,
+      backgroundColor: '#E3E3E3',
+      zIndex: 97,
+    },
+  });
+  const ProgressBar = () => (
+    <View style={styles.progressBarWrap}>
+      <View style={styles.progressBarLeftHider} />
+      <Animated.View
+        style={[
+          styles.progressBar,
+          {
+            transform: [{translateX}],
+          },
+          {zIndex: 98},
+        ]}
+      />
+      <View style={styles.progressBarBackground} />
+    </View>
   );
-  React.useEffect(() => {
+  const Header = <ProgressBar />;
+
+  function handleRouteChange() {
     switch (cp) {
       case 'Main':
         console.log('running...');
-        // animatingProgressBar.current.setValue(1);
-        setProgressValue(1);
+        setProgressValue(0);
         break;
       case 'Terms':
         console.log('running...');
-        setProgressValue(2);
+        setProgressValue(1);
         break;
       case 'Nickname':
         console.log('running...');
-        setProgressValue(3);
+        setProgressValue(2);
         break;
       case 'Vaccinated':
         console.log('running...');
-        setProgressValue(4);
+        setProgressValue(3);
         break;
       case 'School':
         console.log('running...');
-        setProgressValue(5);
+        setProgressValue(4);
         break;
       case 'HangOuts':
         console.log('running...');
-        setProgressValue(6);
+        setProgressValue(5);
         break;
     }
+  }
+  React.useEffect(() => {
+    handleRouteChange();
   }, [navigation, route]);
   return (
     <RegisterProgress.Navigator
       screenOptions={{
-        header: () => ProgressBar,
+        header: () => Header,
       }}>
       <RegisterProgress.Screen
         name="RegisterNav"
@@ -84,11 +130,11 @@ function RegisterNavigator(props: IRegisterNavigationProps) {
         return {headerShown: false};
       }}>
       <Register.Screen name="Main" component={RegisterMainScreen} />
-      <Register.Screen name="Terms" component={RegisterTermsScreen} />
-      <Register.Screen name="Nickname" component={RegisterNicknameScreen} />
-      <Register.Screen name="Vaccinated" component={RegisterVaccinatedScreen} />
-      <Register.Screen name="School" component={RegisterSchoolScreen} />
       <Register.Screen name="HangOuts" component={RegisterHangOutsScreen} />
+      <Register.Screen name="Vaccinated" component={RegisterVaccinatedScreen} />
+      <Register.Screen name="Terms" component={RegisterTermsScreen} />
+      <Register.Screen name="School" component={RegisterSchoolScreen} />
+      <Register.Screen name="Nickname" component={RegisterNicknameScreen} />
     </Register.Navigator>
   );
 }
